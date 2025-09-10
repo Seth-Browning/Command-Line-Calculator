@@ -20,7 +20,7 @@ int main() {
     while (expression != "quit") {
    
         Lexer lexer(&expression);
-        Token currentToken = lexer.lexer_next_token();
+        Token currentToken = lexer.getToken();
         Parser parser = {lexer, currentToken};
         ExpressionNode* expression_tree = parser.get_expression_tree();
         

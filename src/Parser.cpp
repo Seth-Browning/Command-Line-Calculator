@@ -4,7 +4,7 @@
  * @brief Advances the parser to the next token.
  */
 void Parser::parser_advance() {
-    current = lexer.lexer_next_token();
+    current = lexer.getToken();
 }
 
 /**

@@ -166,4 +166,19 @@ Token Lexer::lexer_next_token() {
  * @brief Constructor that gives the lexer the string it will analyze
  * @param analysisString The string to analyze.
  */
-Lexer::Lexer(string* analysisString) : analysisString(analysisString), start(0), current(0) {}
+Lexer::Lexer(string* analysisString) : 
+    analysisString(analysisString), start(0), current(0),
+    currentTokenIndex(0) {
+    tokens.push_back(lexer_next_token());
+
+    while(tokens.at(tokens.size() - 1).tokenType != TokenType_EOF) {
+        tokens.push_back(lexer_next_token());
+    }
+}
+
+
+Token Lexer::getToken() {
+    Token holder = tokens.at(currentTokenIndex);
+    currentTokenIndex++;
+    return holder;
+}

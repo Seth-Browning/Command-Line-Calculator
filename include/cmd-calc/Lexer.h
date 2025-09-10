@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <string>
+#include <vector>
 #include "Token.h"
 
 using namespace std;
@@ -21,11 +22,16 @@ class Lexer {
     int start;
     int current;
     
+    
     char GetChar(int index);
-    Token lexer_next_token();
     string* analysisString;
     Lexer(string* analysisString);
-
+    Token getToken();
+    
+    private:
+    int currentTokenIndex;
+    vector<Token> tokens;
+    Token lexer_next_token();
 };
 
 #endif
