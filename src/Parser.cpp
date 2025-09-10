@@ -96,7 +96,7 @@ ExpressionNode* parser_parse_number(Parser* parser) {
     
     ret->type = NodeType_Number;
     ret->number = stod(parser->current.lexeme);
-    // I'm masochic enough to have written this function myself if it didn't
+    // I'm masochistic enough to have written this function myself if it didn't
     // already exist.
 
     parser->parser_advance();

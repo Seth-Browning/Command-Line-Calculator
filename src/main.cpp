@@ -21,6 +21,8 @@ int main() {
    
         Lexer lexer(&expression);
 
+        // I'm not sure if this is the best way to do this, but I think it's
+        // fine for now.
         if (lexer.getErrorStatus() == ErrorStatus_None) {
             Token currentToken = lexer.getToken();
             Parser parser = {lexer, currentToken};

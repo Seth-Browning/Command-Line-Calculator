@@ -163,7 +163,12 @@ Token Lexer::lexer_next_token() {
     }
 }
 
-
+/**
+ * @brief Goes through the lexer's token list and checks for any obvious
+ * errors, like syntax and parenthesies errors.
+ * 
+ * @returns Error status based on the token list.
+ */
 ErrorStatus Lexer::check_token_list() {
     if (tokens.size() <= 1) return ErrorStatus_Empty;
 
@@ -200,12 +205,17 @@ ErrorStatus Lexer::check_token_list() {
 
 // Constructor to give the lexer its input
 /**
- * @brief Constructor that gives the lexer the string it will analyze
+ * @brief Lexes the given string and checks for errors in the 
+ * resulting list.
+ * 
  * @param analysisString The string to analyze.
  */
 Lexer::Lexer(string* analysisString) : 
-    analysisString(analysisString), start(0), current(0),
-    currentTokenIndex(0) {
+    analysisString(analysisString), 
+    start(0), 
+    current(0),
+    currentTokenIndex(0)
+{
     tokens.push_back(lexer_next_token());
 
     while(tokens.at(tokens.size() - 1).tokenType != TokenType_EOF) {
@@ -227,6 +237,11 @@ Token Lexer::getToken() {
     return holder;
 }
 
+/**
+ * @brief Gets the lexer's error status.
+ * 
+ * @return Error status.
+ */
 ErrorStatus Lexer::getErrorStatus() {
     return errorStatus;
 }
