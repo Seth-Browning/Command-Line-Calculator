@@ -31,9 +31,7 @@ string toLowerCase(string inputString) {
 }
 
 
-// function signature given so that helper parse functions could call `parser_parse_expression`.
-
-ExpressionNode* parser_parse_expression(Parser* parser, Precedence prev_prec);
+ExpressionNode* parser_parse_expression(Parser* parser, Precedence prev_prec); // function signature given so that helper parse functions could call `parser_parse_expression`.
 
 
 // This was done because a map didn't work, I tried.
