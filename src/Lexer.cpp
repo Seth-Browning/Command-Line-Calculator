@@ -157,8 +157,45 @@ Token Lexer::lexer_next_token() {
 
         default:
             if(is_alpha(GetChar(current))) return lexer_ident(this);
+
+            current++;
             return lexer_make_token(this, TokenType_Error);
     }
+}
+
+
+ErrorStatus Lexer::check_token_list() {
+    if (tokens.size() <= 1) return ErrorStatus_Empty;
+
+    vector<char> parenthesisStack;
+
+    for (int i = 0; i < tokens.size(); i++) {
+        Token currentToken = tokens.at(i);
+        
+        // Error token check
+        if (currentToken.tokenType == TokenType_Error) {
+            return ErrorStatus_SyntaxError;
+        }
+
+        //Parenthesis check
+        if (currentToken.tokenType == TokenType_OpenParen) {
+            parenthesisStack.push_back('(');
+        }
+        if (currentToken.tokenType == TokenType_CloseParen) {
+            if (parenthesisStack.empty()) {
+                // More ) than (
+                return ErrorStatus_ParenthesisError;
+            } else {
+                parenthesisStack.pop_back();
+            }
+        }
+        
+    }
+
+    // More ( than )
+    if (!parenthesisStack.empty()) return ErrorStatus_ParenthesisError;
+
+    return ErrorStatus_None;
 }
 
 // Constructor to give the lexer its input
@@ -174,11 +211,22 @@ Lexer::Lexer(string* analysisString) :
     while(tokens.at(tokens.size() - 1).tokenType != TokenType_EOF) {
         tokens.push_back(lexer_next_token());
     }
+
+    errorStatus = check_token_list();
 }
 
-
+/**
+ * @brief Gets the current token from the lexer, causes the
+ * current token to advance.
+ * 
+ * @returns The current token.
+ */
 Token Lexer::getToken() {
     Token holder = tokens.at(currentTokenIndex);
     currentTokenIndex++;
     return holder;
+}
+
+ErrorStatus Lexer::getErrorStatus() {
+    return errorStatus;
 }
