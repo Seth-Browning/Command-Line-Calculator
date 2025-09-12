@@ -126,9 +126,11 @@ ExpressionNode* parser_parse_infix_expr(Parser* parser, Token oper, ExpressionNo
     return ret;
 }
 
+// TODO: Fix ident issues
 // Parenthesies act as an exception to the order of operations, and
 // can replace any leaf node without changing the shape of the tree as a whole.
 // It's a difficult thing to grasp, but it acts like a leaf node even if it isn't one.
+
 /**
  * @brief Parses an expression that doesn't change the expression
  * tree's general form.

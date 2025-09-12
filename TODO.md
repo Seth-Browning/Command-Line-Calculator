@@ -1,0 +1,1 @@
+- [ ] Fix identifier bug where no parenthesis after a function name causes a crash
