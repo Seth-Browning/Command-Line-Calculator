@@ -25,23 +25,29 @@ enum ErrorStatus {
  */
 class Lexer {
     public:
-        char GetChar(int index);
         Lexer(string* analysisString);
+
+        char GetChar(int index);
         Token getToken();
         ErrorStatus getErrorStatus();
 
         // Token Batching span.
-        int start;
-        int current;
-    
-        string* analysisString;
-    private:
-        Token lexer_next_token();
         
-        ErrorStatus errorStatus = ErrorStatus_Unchecked;
-        int currentTokenIndex;
+        private:
+        Token lexer_next_token();
+        int start = 0;
+        int current = 0;
+        string* analysisString = nullptr;
+        
+        int currentTokenIndex = 0;
         vector<Token> tokens;
+        ErrorStatus errorStatus = ErrorStatus_Unchecked;
         ErrorStatus check_token_list();
+
+        char GetCurrentLexerChar();
+        Token lexer_make_token(TokenType type);
+        Token lexer_number();
+        Token lexer_ident();
 };
 
 #endif

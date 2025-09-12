@@ -1,6 +1,8 @@
 #include "cmd-calc/Lexer.h"
 #include "cmd-calc/CharacterChecks.h"
 
+// bro is really out here doing stuff
+
 /**
  * @brief Gets the character from the lexer's string 
  * at the specified index.
@@ -19,9 +21,9 @@ char Lexer::GetChar(int index) {
  * @param lexer* pointer to the lexer to fetch the character from.
  * @returns The lexer's `current` character.
  */
-char GetCurrentLexerChar(Lexer* lexer) {
-    if (lexer->current >= (*lexer->analysisString).size()) return '\0';
-    return lexer->GetChar(lexer->current);
+char Lexer::GetCurrentLexerChar() {
+    if (current >= (*analysisString).size()) return '\0';
+    return GetChar(current);
 }
 
 /**
@@ -33,12 +35,12 @@ char GetCurrentLexerChar(Lexer* lexer) {
  * 
  * @returns A new Token with the specified type and generated lexeme.
  */
-Token lexer_make_token(Lexer *lexer, TokenType type) {
+Token Lexer::lexer_make_token(TokenType type) {
     if (type == TokenType_EOF) {
         return Token("EOF", type);
     }
 
-    return Token(lexer->analysisString->substr(lexer->start, lexer->current - lexer->start), type);
+    return Token(analysisString->substr(start, current - start), type);
 }
 
 /**
@@ -47,18 +49,18 @@ Token lexer_make_token(Lexer *lexer, TokenType type) {
  * @param lexer* The lexer to use to create the number Token.
  * @returns A new number Token from the lexer, with a lexeme of the number.
  */
-Token lexer_number(Lexer *lexer) {
-    while (is_number( GetCurrentLexerChar(lexer) )) {
-        lexer->current++;
+Token Lexer::lexer_number() {
+    while (is_number( GetCurrentLexerChar() )) {
+        current++;
     }
 
-    if (GetCurrentLexerChar(lexer) == '.') {
-        lexer->current++;
-        while (is_number(GetCurrentLexerChar(lexer))) {
-            lexer->current++;
+    if (GetCurrentLexerChar() == '.') {
+        current++;
+        while (is_number(GetCurrentLexerChar())) {
+            current++;
         }
     }
-    return lexer_make_token(lexer, TokenType_Number);
+    return lexer_make_token(TokenType_Number);
 }
 
 /**
@@ -68,19 +70,9 @@ Token lexer_number(Lexer *lexer) {
  * @returns A new identifier Token from the lexer, with a lexeme 
  * of the identifier.
  */
-Token lexer_ident(Lexer *lexer) {
-    while (is_alpha(GetCurrentLexerChar(lexer))) lexer->current++;
-    return lexer_make_token(lexer, TokenType_Ident);
-}
-
-/**
- * @brief Transforms the boolean values into string representations.
- * 
- * @param value Either true or false.
- * @returns Either the string "True" or "False"
- */
-string bool_to_string(bool value) {
-    return value ? "True" : "False";
+Token Lexer::lexer_ident() {
+    while (is_alpha(GetCurrentLexerChar())) current++;
+    return lexer_make_token(TokenType_Ident);
 }
 
 /**
@@ -93,7 +85,7 @@ Token Lexer::lexer_next_token() {
 
     //precheck to make sure that the end of the string hasn't been reached
     if(current >= analysisString->length()) {
-        return lexer_make_token(this, TokenType_EOF);
+        return lexer_make_token(TokenType_EOF);
     }
 
     while(is_whitespace(GetChar(start))) {
@@ -104,30 +96,30 @@ Token Lexer::lexer_next_token() {
 
     //check again to make sure that there wasn't whitespace before the end
     if(current >= analysisString->length()) {
-        return lexer_make_token(this, TokenType_EOF);
+        return lexer_make_token(TokenType_EOF);
     }
 
     char currentChar = GetChar(current);
     switch(currentChar) {
         // easy to check for, only need to move after the symbol and then create the token
-        case '+': current++; return lexer_make_token(this, TokenType_Plus);
-        case '-': current++; return lexer_make_token(this, TokenType_Minus);
-        case '*': current++; return lexer_make_token(this, TokenType_Star);
-        case '/': current++; return lexer_make_token(this, TokenType_Slash);
-        case '^': current++; return lexer_make_token(this, TokenType_Caret);
-        case '(': current++; return lexer_make_token(this, TokenType_OpenParen);
-        case ')': current++; return lexer_make_token(this, TokenType_CloseParen);
+        case '+': current++; return lexer_make_token(TokenType_Plus);
+        case '-': current++; return lexer_make_token(TokenType_Minus);
+        case '*': current++; return lexer_make_token(TokenType_Star);
+        case '/': current++; return lexer_make_token(TokenType_Slash);
+        case '^': current++; return lexer_make_token(TokenType_Caret);
+        case '(': current++; return lexer_make_token(TokenType_OpenParen);
+        case ')': current++; return lexer_make_token(TokenType_CloseParen);
 
         // more difficult, but there's a function for that
         case '0': case '1': case '2': case '3': case '4': 
         case '5': case '6': case '7': case '8': case '9':
-            return lexer_number(this);
+            return lexer_number();
 
         default:
-            if(is_alpha(GetChar(current))) return lexer_ident(this);
+            if(is_alpha(GetChar(current))) return lexer_ident();
 
             current++;
-            return lexer_make_token(this, TokenType_Error);
+            return lexer_make_token(TokenType_Error);
     }
 }
 
