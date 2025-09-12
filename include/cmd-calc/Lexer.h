@@ -8,6 +8,9 @@
 
 using namespace std;
 
+/**
+ * @brief Error statuses that can be given from the lexer pre-checks
+ */
 enum ErrorStatus {
     ErrorStatus_Unchecked,
     ErrorStatus_None,
@@ -29,12 +32,14 @@ class Lexer {
 
         char GetChar(int index);
         Token getToken();
+        Token peekToken();
         ErrorStatus getErrorStatus();
 
-        // Token Batching span.
         
         private:
         Token lexer_next_token();
+
+        // Token Batching span.
         int start = 0;
         int current = 0;
         string* analysisString = nullptr;

@@ -22,7 +22,7 @@ char Lexer::GetChar(int index) {
  * @returns The lexer's `current` character.
  */
 char Lexer::GetCurrentLexerChar() {
-    if (current >= (*analysisString).size()) return '\0';
+    if (current >= analysisString->size()) return '\0';
     return GetChar(current);
 }
 
@@ -195,6 +195,15 @@ Token Lexer::getToken() {
     Token holder = tokens.at(currentTokenIndex);
     currentTokenIndex++;
     return holder;
+}
+
+/**
+ * @brief Gets the next token from the lexer without consuming it.
+ * 
+ * @returns The next token.
+ */
+Token Lexer::peekToken() {
+    return tokens.at(currentTokenIndex + 1);
 }
 
 /**
