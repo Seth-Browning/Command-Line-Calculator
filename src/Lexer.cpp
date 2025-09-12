@@ -1,4 +1,5 @@
 #include "cmd-calc/Lexer.h"
+#include "cmd-calc/CharacterChecks.h"
 
 /**
  * @brief Gets the character from the lexer's string 
@@ -21,39 +22,6 @@ char Lexer::GetChar(int index) {
 char GetCurrentLexerChar(Lexer* lexer) {
     if (lexer->current >= (*lexer->analysisString).size()) return '\0';
     return lexer->GetChar(lexer->current);
-}
-
-/**
- * @brief Checks if the specifies character is whitespace.
- * 
- * @param character The character that is being checked.
- * @returns If that character is whitespace.
- */
-bool is_whitespace(char character) {
-    return character == ' ' || character == '\n' || 
-        character == '\t' || character == '\r' || 
-        character == '\f' || character == '\v';
-}
-
-/**
- * @brief Checks if the specifies character is an Alphabetical character,
- * either lowercase or uppercase.
- * 
- * @param character The character that is being checked.
- * @returns If the character is a letter.
- */
-bool is_alpha(char character) {
-    return (character >= 'a' && character <= 'z') || (character >= 'A' && character <= 'Z');
-}
-
-/**
- * @brief Checks if the specifies character is a number character.
- * 
- * @param Character The character to check.
- * @returns If the character is a number;
- */
-bool is_number(char character) {
-    return (character >= '0' && character <= '9');
 }
 
 /**

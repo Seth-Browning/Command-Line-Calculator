@@ -1,4 +1,5 @@
 #include "cmd-calc/Parser.h"
+#include "cmd-calc/CharacterChecks.h"
 
 /**
  * @brief Advances the parser to the next token.
@@ -6,30 +7,6 @@
 void Parser::parser_advance() {
     current = lexer.getToken();
 }
-
-/**
- * @brief Gives the lowercase version of a letter.
- * @param inputChar The character to lowercase.
- * @returns The lowercase form of the letter
- */
-char toLowercase(char inputChar) {
-    if (inputChar >= 'A' && inputChar <= 'Z') return (inputChar - ('A' - 'a'));
-    return inputChar;
-}
-
-/**
- * @brief Gives a lowercase version of the given string.
- * @param inputString The string to copy and lowercase.
- * @returns A lowercase copy of the given string.
- */
-string toLowerCase(string inputString) {
-    string copy = inputString;
-    for(int i = 0; i < copy.size(); i++) {
-        copy[i] = toLowercase(copy[i]);
-    }
-    return copy;
-}
-
 
 ExpressionNode* parser_parse_expression(Parser* parser, Precedence prev_prec); // function signature given so that helper parse functions could call `parser_parse_expression`.
 
@@ -60,7 +37,7 @@ Precedence precedence_lookup(TokenType tokenType) {
  * `Trivial` was given instead.
  */
 FunctionNames function_name_lookup(string name) {
-    string lowerName = toLowerCase(name);
+    string lowerName = to_lowercase(name);
     if (lowerName == "sin") return Sin;
     if (lowerName == "cos") return Cos;
     if (lowerName == "tan") return Tan;
