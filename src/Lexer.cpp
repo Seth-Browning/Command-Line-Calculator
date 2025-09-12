@@ -203,6 +203,7 @@ Token Lexer::getToken() {
  * @returns The next token.
  */
 Token Lexer::peekToken() {
+    // deal with the end of the list by yourself, I don't wanna hear it
     return tokens.at(currentTokenIndex + 1);
 }
 
