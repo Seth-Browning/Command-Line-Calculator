@@ -14,6 +14,7 @@ struct Parser {
     Token current;
 
     void parser_advance();
+    Token peak();
     ExpressionNode* get_expression_tree();
 };
 

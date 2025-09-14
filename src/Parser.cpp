@@ -8,6 +8,10 @@ void Parser::parser_advance() {
     current = lexer.getToken();
 }
 
+Token Parser::peak() {
+    return lexer.peekToken();
+}
+
 ExpressionNode* parser_parse_expression(Parser* parser, Precedence prev_prec); // function signature given so that helper parse functions could call `parser_parse_expression`.
 
 
@@ -191,8 +195,7 @@ ExpressionNode* parser_parse_terminal_expr(Parser* parser) {
             ret = new ExpressionNode();
             ret->type = NodeType_Number;
             ret->number = 0.0;
-            parser->parser_advance();
-
+            
         }
 
     } else return error_node();
