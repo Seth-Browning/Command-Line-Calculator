@@ -189,7 +189,7 @@ Lexer::Lexer(string* analysisString) :
  * @brief Gets the current token from the lexer, causes the
  * current token to advance.
  * 
- * @returns The current token.
+ * @returns The current token from the Lexer.
  */
 Token Lexer::getToken() {
     Token holder = tokens.at(currentTokenIndex);
@@ -200,11 +200,21 @@ Token Lexer::getToken() {
 /**
  * @brief Gets the next token from the lexer without consuming it.
  * 
- * @returns The next token.
+ * @returns The next token from the Lexer.
  */
 Token Lexer::peekToken() {
     // deal with the end of the list by yourself, I don't wanna hear it
     return tokens.at(currentTokenIndex + 1);
+}
+
+/**
+ * @brief Gets the previous token from the lexer without consuming
+ * any input.
+ * 
+ * @returns The previous token from the Lexer.
+ */
+Token Lexer::previousToken() {
+    return tokens.at(currentTokenIndex - 1);
 }
 
 /**

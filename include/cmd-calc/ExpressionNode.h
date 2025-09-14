@@ -35,6 +35,11 @@ enum FunctionNames {
     Abs
 };
 
+enum ConstantNames {
+    e,
+    pi
+};
+
 /**
  * @brief A Node that contains information about itself as well
  * as references to other nodes in a tree structure.

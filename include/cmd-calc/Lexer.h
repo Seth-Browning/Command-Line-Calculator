@@ -33,6 +33,7 @@ class Lexer {
         char GetChar(int index);
         Token getToken();
         Token peekToken();
+        Token previousToken();
         ErrorStatus getErrorStatus();
 
         
