@@ -157,52 +157,55 @@ ExpressionNode* parser_parse_terminal_expr(Parser* parser) {
         string identifier = parser->current.lexeme;
         parser->parser_advance();
 
-        // Check if the identifier has the form of a function
-        if(parser->current.tokenType == TokenType_OpenParen) {
-            
-            ExpressionNode* func_ret = new ExpressionNode();
-            
-            // parse the expression inside of the function body
-            // and then move out of it
-            parser->parser_advance();
-            func_ret = parser_parse_expression(parser, Precedence_Min);
-            if (parser->current.tokenType == TokenType_CloseParen) {
+        if (toFunctionNames.find(identifier) != toFunctionNames.end()) {
+
+            if (parser->current.tokenType == TokenType_OpenParen) {
+                ExpressionNode* func_arg = new ExpressionNode();
                 parser->parser_advance();
+                func_arg = parser_parse_expression(parser, Precedence_Min);
+                if (parser->current.tokenType == TokenType_CloseParen) {
+                    parser->parser_advance();
+                }
+
+                ret = new ExpressionNode();
+                ret->type = NodeType_Func;
+                ret->func.body = func_arg;
+                ret->func.name = toFunctionNames.at(identifier);
+            } else {
+                ret = new ExpressionNode();
+                ret->type = NodeType_Error;
             }
 
-            ret = new ExpressionNode();
-            ret->type = NodeType_Func;
-            ret->func.body = func_ret;
-            ret->func.name = function_name_lookup(identifier);
+        } else if (toConstantNames.find(identifier) != toConstantNames.end()) {
 
-        // The identifier is Euler's constant
-        } else if(identifier == "e") {
-
+            ConstantNames constant = toConstantNames.at(identifier);
             ret = new ExpressionNode();
             ret->type = NodeType_Number;
-            ret->number = 2.71828182845904523536;
+            switch (constant) {
+                case e:
+                    ret->number = 2.71828182845904523536;
+                    break;
+                case pi:
+                    ret->number = 3.14159265358979323846;
+                    break;
+                default:
+                    ret->number = 0;
+                    break;
+            }
 
-        // The identifier is pi
-        } else if(identifier == "pi") {
-
-            ret = new ExpressionNode();
-            ret->type = NodeType_Number;
-            ret->number = 3.14159265358979323846;
-
-        // Unknown identier, default its value to 0
         } else {
 
             ret = new ExpressionNode();
-            ret->type = NodeType_Number;
-            ret->number = 0.0;
-            
+            ret->type = NodeType_Error;
+
         }
 
     } else return error_node();
 
     // Implicit Multiplication
     if (parser->current.tokenType == TokenType_Number || 
-        parser->current.tokenType == TokenType_OpenParen) {
+        parser->current.tokenType == TokenType_OpenParen ||
+        parser->current.tokenType == TokenType_Ident) {
         
         ExpressionNode* new_ret = new ExpressionNode();
         new_ret->type = NodeType_Mul;

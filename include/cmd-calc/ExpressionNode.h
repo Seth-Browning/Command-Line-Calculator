@@ -3,7 +3,11 @@
 
 #include <iostream>
 #include <string>
+#include <vector>
+#include <map>
 #include <math.h>
+
+using namespace std;
 
 enum ExpressionNodeKind {
     NodeType_Error,
@@ -40,6 +44,25 @@ enum ConstantNames {
     pi
 };
 
+const map<string, FunctionNames> toFunctionNames = {
+    {"sin", Sin},
+    {"cos", Cos},
+    {"tan", Tan},
+    {"sqrt", Sqrt},
+    {"log", Log},
+    {"ln", Ln},
+    {"log2", Log2},
+    {"asin", ASin},
+    {"acos", ACos},
+    {"atan", ATan},
+    {"abs", Abs}
+};
+
+const map<string, ConstantNames> toConstantNames = {
+    {"e", e},
+    {"pi", pi}
+};
+
 /**
  * @brief A Node that contains information about itself as well
  * as references to other nodes in a tree structure.
@@ -57,6 +80,14 @@ class ExpressionNode {
         struct { ExpressionNode* left; ExpressionNode* right;} binary;
         struct { ExpressionNode* body; FunctionNames name;} func;
     };
+
+    vector<ExpressionNode*> functionArguments = {};
+
+    ~ExpressionNode() {
+        for (ExpressionNode* exprNode : functionArguments) {
+            delete exprNode;
+        }
+    }
 
     double evaluate(ExpressionNode* node);
 };
