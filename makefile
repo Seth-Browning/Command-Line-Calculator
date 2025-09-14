@@ -10,7 +10,7 @@ BUILD_DIR := build
 
 SOURCES := $(wildcard $(SRC_DIR)/*.cpp)
 OBJECTS := $(patsubst $(SRC_DIR)/%.cpp, $(BUILD_DIR)/%.o, $(SOURCES))
-TARGET := numericLexer
+TARGET := cmdCalculator
 
 TEST_SOURCES := $(wildcard $(TEST_DIR)/*.cpp)
 TEST_OBJECTS := $(patsubst $(TEST_DIR)/%.cpp, $(BUILD_DIR)/%.test.o, $(TEST_SOURCES))
@@ -40,5 +40,8 @@ $(BUILD_DIR):
 # Clean build artifacts
 clean:
 	rm -rf $(BUILD_DIR) $(TARGET) $(TEST_TARGET)
+
+run: $(TARGET)
+	./$(TARGET)
 
 .PHONY: all clean
