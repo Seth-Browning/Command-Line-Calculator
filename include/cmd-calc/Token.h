@@ -7,6 +7,13 @@
 
 using namespace std;
 
+/**
+ * @brief Describes what role a token plays and determines
+ * the placement of an ExpressionNode in the resulting
+ * evaluation tree.
+ * 
+ * @see ExpressionNode
+ */
 enum TokenType {
     TokenType_EOF, TokenType_Error,
     TokenType_Ident, TokenType_Number,
@@ -14,11 +21,20 @@ enum TokenType {
     TokenType_Plus, TokenType_Minus,
     TokenType_Star, TokenType_Slash,
     TokenType_Caret,
+
+    TokenType_Assignment, TokenType_Separator,
     TokenType_OpenParen,
     TokenType_CloseParen,
     TokenType_Empty
 };
 
+/**
+ * @brief Precedence level determins what order operators
+ * are evaluated in.
+ * 
+ * @note `Precedence_Min` is used as a baseline precedence
+ * for comparison between operators.
+ */
 enum Precedence {
     Precedence_Min,     // Special
     Precedence_Term,    // + and -
@@ -27,7 +43,9 @@ enum Precedence {
 };
 
 /**
- * @brief A singular unit from a string that hold information.
+ * @brief A singular unit of mathematical information,
+ * telling what kind of token it is and the underlying 
+ * text from it's origin string.
  * 
  * @author Seth Browning
  * @date 9/7/2025

@@ -1,1 +1,5 @@
-- [ ] Fix identifier bug where no parenthesis after a function name causes a crash
+# To Do
+
+- [ ] User defined variables
+- [ ] Multi-argument functions
+- [ ] Evaluation error checking

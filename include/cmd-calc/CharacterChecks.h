@@ -6,6 +6,14 @@
 
 using namespace std;
 
+// ********************************************************
+// **                     Summary                        **
+// ********************************************************
+// 
+// Some helper functions used to determine the type of a 
+// character and gives some operations for them.
+
+
 /**
  * @brief Checks if the specifies character is whitespace.
  * 
@@ -15,8 +23,8 @@ using namespace std;
 bool is_whitespace(char character);
 
 /**
- * @brief Checks if the specifies character is an Alphabetical character,
- * either lowercase or uppercase.
+ * @brief Checks if the specifies character is an 
+ * Alphabetical character, either lowercase or uppercase.
  * 
  * @param character The character that is being checked.
  * @returns If the character is a letter.
@@ -48,7 +56,7 @@ string to_lowercase(string str);
 /**
  * @brief Transforms the boolean values into string representations.
  * 
- * @param value Either true or false.
+ * @param value Boolean value.
  * @returns Either the string "True" or "False"
  */
 string bool_to_string(bool value);

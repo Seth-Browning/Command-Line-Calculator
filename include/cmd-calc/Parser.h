@@ -9,6 +9,12 @@
 
 using namespace std;
 
+/**
+ * @brief Given a `Lexer`, takes the token stream it generated
+ * and combines them into a tree of `ExpressionNode`s. This is
+ * done to give structure to the mathematical operations.
+ * @see Lexer, ExpressionNode
+ */
 struct Parser {
     Lexer lexer;
     Token current;

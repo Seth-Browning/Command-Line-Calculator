@@ -1,7 +1,11 @@
 #include "cmd-calc/ExpressionNode.h"
 
 /**
- * @brief Evaluates the expression node, potentially recursively.
+ * @brief Performs the node's operation (designated by its type),
+ * and returns the result of the operation. 
+ * 
+ * @note Evaluation should be done on the root node of the expression tree,
+ * since evaluating a parent will require evaluating child nodes.
  * 
  * @param node The expression node to evaluate
  * @returns the result of the calculation

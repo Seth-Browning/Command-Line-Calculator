@@ -9,7 +9,8 @@
 using namespace std;
 
 /**
- * @brief Error statuses that can be given from the lexer pre-checks
+ * @brief Error status that give information about the
+ * Lexer's generated token stream.
  */
 enum ErrorStatus {
     ErrorStatus_Unchecked,
@@ -20,8 +21,8 @@ enum ErrorStatus {
 };
 
 /**
- * @brief Creates tokens from analyzing an input string,
- * consumes inputs when doing so.
+ * @brief Given an input string, generates mathematical tokens
+ * and performs validation checks.
  * 
  * @author Seth Browning
  * @date 9/7/2025

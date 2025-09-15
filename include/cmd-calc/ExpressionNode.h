@@ -9,6 +9,10 @@
 
 using namespace std;
 
+/**
+ * @brief The type of expression node, which determines what features
+ * the node has.
+ */
 enum ExpressionNodeKind {
     NodeType_Error,
     NodeType_Number,
@@ -23,6 +27,9 @@ enum ExpressionNodeKind {
     NodeType_Func
 };
 
+/**
+ * @brief Predefined functions names.
+ */
 enum FunctionNames {
     Trivial,
     Sin,
@@ -39,11 +46,17 @@ enum FunctionNames {
     Abs
 };
 
+/**
+ * @brief Predefined constant names.
+ */
 enum ConstantNames {
     e,
     pi
 };
 
+/**
+ * @brief A map from a string to a function's name.
+ */
 const map<string, FunctionNames> toFunctionNames = {
     {"sin", Sin},
     {"cos", Cos},
@@ -64,8 +77,10 @@ const map<string, ConstantNames> toConstantNames = {
 };
 
 /**
- * @brief A Node that contains information about itself as well
- * as references to other nodes in a tree structure.
+ * @brief A Node containing information based on its position in a
+ * tree structure, which may include references to other nodes. 
+ * Each node can represent a function, a number, or an opertion 
+ * (unary or binary).
  * 
  * @author Seth Browning
  * @date 9/7/2025
@@ -83,13 +98,14 @@ class ExpressionNode {
 
     vector<ExpressionNode*> functionArguments = {};
 
+    
+    double evaluate(ExpressionNode* node);
+    
     ~ExpressionNode() {
         for (ExpressionNode* exprNode : functionArguments) {
             delete exprNode;
         }
     }
-
-    double evaluate(ExpressionNode* node);
 };
 
 #endif
