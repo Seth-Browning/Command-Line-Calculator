@@ -124,6 +124,27 @@ Token Lexer::lexer_next_token() {
 }
 
 /**
+ * @brief Checks if the next token's type is valid to come immediately
+ * after the current token.
+ * 
+ * @returns Whether or not the next token can follow the current token.
+ */
+bool token_type_can_follow(TokenType currentTokenType, TokenType nextTokenType) {
+    switch (currentTokenType) {
+        case TokenType_OpenParen:
+        case TokenType_CloseParen:
+        case TokenType_Plus:
+        case TokenType_Minus:
+        case TokenType_Star:
+        case TokenType_Slash:
+        case TokenType_Caret:
+            return !(nextTokenType == TokenType_Ident || nextTokenType == TokenType_Plus || nextTokenType == TokenType_Minus || nextTokenType == TokenType_OpenParen || nextTokenType == TokenType_Number);
+    }
+
+    return true;
+}
+
+/**
  * @brief Goes through the lexer's token list and checks for any obvious
  * errors, like syntax and parenthesies errors.
  * 
@@ -134,27 +155,49 @@ ErrorStatus Lexer::check_token_list() {
 
     vector<char> parenthesisStack;
 
-    for (int i = 0; i < tokens.size(); i++) {
+    for (int i = 0; i < tokens.size() - 1; i++) {
         Token currentToken = tokens.at(i);
+        Token nextToken = tokens.at(i + 1);
+        TokenType currentTokenType = currentToken.tokenType;
+        TokenType nextTokenType = nextToken.tokenType;
         
-        // Error token check
-        if (currentToken.tokenType == TokenType_Error) {
-            return ErrorStatus_SyntaxError;
-        }
+        // enforces token ordering rules
+        switch (currentToken.tokenType) {
+            case TokenType_Empty:
+            case TokenType_Error:
+                return ErrorStatus_SyntaxError;
+            
+            case TokenType_OpenParen:
+                parenthesisStack.push_back('(');
+                if ( token_type_can_follow(currentTokenType, nextTokenType) ) {
+                    return ErrorStatus_SyntaxError;
+                }
+                break;
 
-        //Parenthesis check
-        if (currentToken.tokenType == TokenType_OpenParen) {
-            parenthesisStack.push_back('(');
-        }
-        if (currentToken.tokenType == TokenType_CloseParen) {
-            if (parenthesisStack.empty()) {
-                // More ) than (
-                return ErrorStatus_ParenthesisError;
-            } else {
+            case TokenType_CloseParen:
+                if (parenthesisStack.empty()) return ErrorStatus_ParenthesisError;
                 parenthesisStack.pop_back();
-            }
+                if ( token_type_can_follow(currentTokenType, nextTokenType) ) {
+                    return ErrorStatus_SyntaxError;
+                }
+                break;
+
+            case TokenType_Star:
+            case TokenType_Slash:
+            case TokenType_Caret:
+                if (i == 0) return ErrorStatus_SyntaxError;
+            case TokenType_Plus:
+            case TokenType_Minus:
+                // An operation can be followed by a number, a +, a -, or a (
+                if ( token_type_can_follow(currentTokenType, nextTokenType) ) {
+                    return ErrorStatus_SyntaxError;
+                }
+                break;
+            
+            case TokenType_Number:
+                // a number can be followed by a *, /, +, -, ^, (, ), EOF, or ident
+                break;
         }
-        
     }
 
     // More ( than )
@@ -165,8 +208,9 @@ ErrorStatus Lexer::check_token_list() {
 
 // Constructor to give the lexer its input
 /**
- * @brief Lexes the given string and checks for errors in the 
- * resulting list.
+ * @brief Lexes the given string into a stream of tokens
+ * and performs checks to make sure that they are in a valid
+ * order.
  * 
  * @param analysisString The string to analyze.
  */
