@@ -155,6 +155,8 @@ ErrorStatus Lexer::check_token_list() {
 
     vector<char> parenthesisStack;
 
+    // this is probably not the best way to do this, so it'll probably be replaced
+    // by something better after I've done some research.
     for (int i = 0; i < tokens.size() - 1; i++) {
         Token currentToken = tokens.at(i);
         Token nextToken = tokens.at(i + 1);
